@@ -17,7 +17,7 @@ public class WService {
 
 
 	/***************************************************/
-	/***************Partie sur les adhérents **************/
+	/***************Partie sur les adhï¿½rents **************/
 	/*****************************************************/
 	@POST
 	@Path("/Adherents/ajout/{unAdh}")
@@ -127,15 +127,33 @@ public class WService {
 	/***************************************************/
 	/***************Partie sur les oeuvres  **************/
 	/*****************************************************/
-	
-	
+
+
+
+	@POST
+	@Path("/Oeuvres/ajout/{newoeuvre}")
+	@Consumes("application/json")
+	public void insertionOeuvre(String oeuvre) throws MonException {
+		DialogueBd unDialogueBd = DialogueBd.getInstance();
+		Gson gson = new Gson();
+		Oeuvre newoeuvre = gson.fromJson(oeuvre, Oeuvre.class);
+		try {
+			String mysql = "";
+			mysql = "INSERT INTO oeuvrevente (id_oeuvrevente, titre_oeuvrevente, etat_oeuvrevente, prix_oeuvrevente, id_proprietaire) ";
+			mysql += " VALUES ( \'" + newoeuvre.getIdentifiant()+ "\', \'" + newoeuvre.getTitre()+  "\', \'"  + newoeuvre.getEtat() +  "\', \'"  + newoeuvre.getPrix()+  "\', \'"  + newoeuvre.getPrix()+  "\') ";
+			unDialogueBd.insertionBD(mysql);
+
+		} catch (MonException e) {
+			throw e;
+		}
+	}
 	
 	@GET
 	@Path("/Oeuvres/{Id}")
 	@Produces("application/json")
 	public String rechercherOeuvreId(@PathParam("Id")  String idOeuvre) throws MonException, Exception
 	{
-		
+
 		String mysql = "";
 		String json ="";
 		Oeuvrevente uneOeuvre;
@@ -143,7 +161,7 @@ public class WService {
 		{
 			mysql = "SELECT id_oeuvrevente, titre_oeuvrevente, etat_oeuvrevente,prix_oeuvrevente,id_proprietaire";
 			mysql += " FROM Oeuvrevente WHERE id_Oeuvrevente = " + idOeuvre + ";";
-			uneOeuvre = rechercherOeuvre(mysql); 
+			uneOeuvre = rechercherOeuvre(mysql);
 			Gson gson = new Gson();
 			json = gson.toJson(uneOeuvre);
 			
@@ -184,7 +202,7 @@ public class WService {
 
 
 	// recherche d'une Oeuvre
-	// On factorise la requête qui doit rendre une oeuvre en vente
+	// On factorise la requï¿½te qui doit rendre une oeuvre en vente
 	public Oeuvrevente rechercherOeuvre(String requete) throws MonException
 	{
 		
@@ -202,7 +220,7 @@ public class WService {
 				uneOeuvre.setEtatOeuvrevente(rs.get(2).toString());
 				uneOeuvre.setPrixOeuvrevente(Float.parseFloat(rs.get(3).toString()));
 				int id = Integer.parseInt(rs.get(4).toString());
-				// On appelle la recherche d'un propriétaire
+				// On appelle la recherche d'un propriï¿½taire
 				uneOeuvre.setProprietaire(rechercherProprietaire(id));
 			}
 		}
@@ -218,7 +236,7 @@ public class WService {
 	}
 	
 	//****************************
-	// Recherche d'un pro^priétaire 
+	// Recherche d'un pro^priï¿½taire 
 	//****************************
 	
 	public Proprietaire rechercherProprietaire(int  id) throws MonException
@@ -272,12 +290,12 @@ public class WService {
 			DialogueBd unDialogueBd = DialogueBd.getInstance();
 			rs =unDialogueBd.lecture(mysql);
 			while (index < rs.size()) {
-				// On crée un stage
+				// On crï¿½e un stage
 				Oeuvrevente uneOeuvre = new Oeuvrevente();
 				// il faut redecouper la liste pour retrouver les lignes
 				uneOeuvre.setIdOeuvrevente(Integer.parseInt(rs.get( index + 0).toString()));
 				uneOeuvre.setTitreOeuvrevente(rs.get( index + 1 ).toString());
-				// On incrémente tous les 2 champs
+				// On incrï¿½mente tous les 2 champs
 				index = index + 2;
 				mesOeuvres.add(uneOeuvre);
 			}
