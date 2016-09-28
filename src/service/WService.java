@@ -136,11 +136,11 @@ public class WService {
 	public void insertionOeuvre(String oeuvre) throws MonException {
 		DialogueBd unDialogueBd = DialogueBd.getInstance();
 		Gson gson = new Gson();
-		Oeuvre newoeuvre = gson.fromJson(oeuvre, Oeuvre.class);
+		Oeuvrevente newoeuvre = gson.fromJson(oeuvre, Oeuvrevente.class);
 		try {
 			String mysql = "";
 			mysql = "INSERT INTO oeuvrevente (id_oeuvrevente, titre_oeuvrevente, etat_oeuvrevente, prix_oeuvrevente, id_proprietaire) ";
-			mysql += " VALUES ( \'" + newoeuvre.getIdentifiant()+ "\', \'" + newoeuvre.getTitre()+  "\', \'"  + newoeuvre.getEtat() +  "\', \'"  + newoeuvre.getPrix()+  "\', \'"  + newoeuvre.getPrix()+  "\') ";
+			mysql += " VALUES ( \'" + newoeuvre.getIdOeuvrevente()+ "\', \'" + newoeuvre.getTitreOeuvrevente()+  "\', \'"  + newoeuvre.getEtatOeuvrevente() +  "\', \'"  + newoeuvre.getPrixOeuvrevente()+  "\', \'"  + "1001"+  "\') ";
 			unDialogueBd.insertionBD(mysql);
 
 		} catch (MonException e) {
