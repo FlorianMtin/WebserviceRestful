@@ -14,14 +14,14 @@ import persistance.DialogueBd;
 
 @Path("/mediatheque")
 public class WService {
-	
-	
+
+
 	/***************************************************/
 	/***************Partie sur les adhérents **************/
 	/*****************************************************/
 	@POST
 	@Path("/Adherents/ajout/{unAdh}")
-	@Consumes("application/json")	
+	@Consumes("application/json")
 	public void insertionAdherent(String unAdherent) throws MonException {
 		DialogueBd unDialogueBd = DialogueBd.getInstance();
 		Gson gson = new Gson();
@@ -29,30 +29,27 @@ public class WService {
 		try {
 			String mysql = "";
 			mysql = "INSERT INTO adherent (nom_adherent, prenom_adherent, ville_adherent) ";
-			mysql += " VALUES ( \'" + unAdh.getNomAdherent()+ "\', \'" + unAdh.getPrenomAdherent();
-			mysql+="  \', \'"  + unAdh.getVilleAdherent() +  "\') ";
+			mysql += " VALUES ( \'" + unAdh.getNomAdherent() + "\', \'" + unAdh.getPrenomAdherent();
+			mysql += "  \', \'" + unAdh.getVilleAdherent() + "\') ";
 			unDialogueBd.insertionBD(mysql);
-			
+
 		} catch (MonException e) {
 			throw e;
 		}
 	}
-
+			/** SUPPRESION OEUVRE **/
 	@DELETE
 	@Path("/Oeuvres/supprimerOeuvre/{Id}")
 	@Consumes("application/json")
-	public void supprimerOeuvreId(@PathParam("Id")  String idOeuvre) throws  Exception
-	{
+	public void supprimerOeuvreId(@PathParam("Id") String idOeuvre) throws Exception {
 		String mysql = "";
 
-		try
-		{
+		try {
 			mysql = "DELETE";
-			mysql += " FROM oeuvrevente WHERE id_oeuvrevente = "+idOeuvre+";";
+			mysql += " FROM oeuvrevente WHERE id_oeuvrevente = " + idOeuvre + ";";
 			System.out.println(mysql);
 			supprimerOeuvre(mysql);
-		}
-		catch (Exception exc) {
+		} catch (Exception exc) {
 			throw new MonException(exc.getMessage(), "systeme");
 		}
 	}
@@ -63,6 +60,28 @@ public class WService {
 			unDialogueBd.insertionBD(requete);
 		} catch (MonException e) {
 			e.printStackTrace();
+		}
+	}
+                 /** Modification OEUVRE **/
+	@PUT
+	@Path("/Oeuvres/Modifier/{uneOeuv}")
+	@Consumes("application/json")
+	public void modificationOeuvreId(String uneOeuvre) throws MonException{
+		String mysql="";
+		DialogueBd unDialogueBd = DialogueBd.getInstance();
+		Gson gson = new Gson();
+		Oeuvrevente uneOeuv = gson.fromJson(uneOeuvre, Oeuvrevente.class);
+		try {
+			mysql = "UPDATE Oeuvrevente set titre_oeuvrevente = '" +uneOeuv.getTitreOeuvrevente() +
+					"' , etat_oeuvrevente = '" + uneOeuv.getEtatOeuvrevente() +
+					"' , prix_oeuvrevente = '" + uneOeuv.getPrixOeuvrevente() +
+					"' WHERE id_oeuvrevente = '" + uneOeuv.getIdOeuvrevente() +"'";
+			System.out.println(mysql);
+
+			unDialogueBd.insertionBD(mysql);
+
+		} catch (MonException e) {
+			throw e;
 		}
 	}
 
